@@ -8,11 +8,9 @@ export class PixabayAPI {
     constructor() {
         this.perPage = 40;
         this.currentPage = 1;
-        // this.query = '';
     }
 
     async getImages() {
-        // console.log('enter qetimage');
         const url = `${this.#BASE_URL}?key=${this.#API_KEY}&q=${this.#query}&image_type=photo&orientation=horizontal&safesearch=true
             &per_page=${this.perPage}&page=${this.currentPage}`;
         try {
@@ -36,10 +34,6 @@ export class PixabayAPI {
     get query() {
         return this.#query;
     };
-
-    setTotal(total) {
-        this.totalPages = total;
-    }
 
     set query(newQuery) {
         this.#query = newQuery;
