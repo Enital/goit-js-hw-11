@@ -15,12 +15,6 @@ const api = new PixabayAPI();
 form.addEventListener('submit', searchFunc);
 loadMoreBtn.addEventListener('click', onLoadMore);
 
-// spinnerPlay();
-
-// window.addEventListener('load', () => {
-//   spinnerStop();
-// });
-
 // loadMoreBtn.classList.add("is-hidden");
 
 async function searchFunc(event) {
