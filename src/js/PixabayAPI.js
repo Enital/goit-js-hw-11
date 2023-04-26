@@ -7,24 +7,38 @@ export class PixabayAPI {
 
     constructor() {
         this.perPage = 40;
-        currentPage = 1;
+        this.currentPage = 1;
+        // this.query = '';
     }
 
-    async getImages(query) {
+    async getImages() {
         // console.log('enter qetimage');
-        const url = `${this.#BASE_URL}?key=${this.#API_KEY}&q=${this.#query}&image_type=photo&orientation=horizontal&safesearch=true`;
-    try {
-        const response = await axios.get(url);
-        console.log(response.data);
-        return response?.data;
+        const url = `${this.#BASE_URL}?key=${this.#API_KEY}&q=${this.#query}&image_type=photo&orientation=horizontal&safesearch=true
+            &per_page=${this.perPage}&page=${this.currentPage}`;
+        try {
+            const response = await axios.get(url);
+            console.log(response.data);
+            return response.data;
         }
-    catch(error) {
+        catch (error) {
             console.log(error);
         }
     }
 
     updatePage() {
         return this.currentPage += 1;
+    }
+
+    resetPage() {
+        this.page = 1;
+    }
+
+    get query() {
+        return this.#query;
+    };
+
+    setTotal(total) {
+        this.totalPages = total;
     }
 
     set query(newQuery) {
