@@ -28,7 +28,7 @@ export class PixabayAPI {
     }
 
     resetPage() {
-        this.page = 1;
+        this.currentPage = 1;
     }
 
     get query() {

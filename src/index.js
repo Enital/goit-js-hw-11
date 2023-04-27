@@ -17,7 +17,7 @@ loadMoreBtn.classList.add("is-hidden");
 
 async function searchFunc(event) {
     event.preventDefault();
-    
+    api.resetPage();
     api.query = event.currentTarget.searchQuery.value.trim();
     // console.log(api.query);
     if (!api.query) {
@@ -25,7 +25,7 @@ async function searchFunc(event) {
         showNotification('empty');
         return;
     }
-    api.resetPage();
+    // api.resetPage();
     gallery.innerHTML = '';
 try {
     const awaitFetch = await api.getImages();
