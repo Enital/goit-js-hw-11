@@ -17,32 +17,33 @@ loadMoreBtn.classList.add("is-hidden");
 
 async function searchFunc(event) {
     event.preventDefault();
+    loadMoreBtn.classList.add("is-hidden");
     api.resetPage();
     api.query = event.currentTarget.searchQuery.value.trim();
-    // console.log(api.query);
     if (!api.query) {
-        // console.log('if');
         showNotification('empty');
+        gallery.innerHTML = '';
         return;
     }
-    // api.resetPage();
     gallery.innerHTML = '';
 try {
     const awaitFetch = await api.getImages();
     
     if (awaitFetch.totalHits === 0) {
+        gallery.innerHTML = '';
         showNotification('failure');
         return;
     }
     Notify.success(`Hooray! We found ${awaitFetch.total} images.`)
     renderGallery(awaitFetch.hits);
-    loadMoreBtn.classList.remove("is-hidden");
 
-    if (api.perPage * api.currentPage > awaitFetch.totalHits & api.query) {
+    if (api.perPage * api.currentPage > awaitFetch.totalHits) {
         showNotification('end');
         loadMoreBtn.classList.add("is-hidden");
         sorryFunc();
+        return;
     }
+    loadMoreBtn.classList.remove("is-hidden");
 } catch (error) {
     console.log(error.message);
 } 
