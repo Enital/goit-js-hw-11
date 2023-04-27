@@ -17,20 +17,24 @@ loadMoreBtn.classList.add("is-hidden");
 
 async function searchFunc(event) {
     event.preventDefault();
+    
     api.query = event.currentTarget.searchQuery.value.trim();
+    // console.log(api.query);
+    if (!api.query) {
+        // console.log('if');
+        showNotification('empty');
+        return;
+    }
     api.resetPage();
     gallery.innerHTML = '';
 try {
     const awaitFetch = await api.getImages();
-    if (!api.query) {
-        showNotification('empty');
-        return;
-    }
+    
     if (awaitFetch.totalHits === 0) {
         showNotification('failure');
         return;
     }
-    Notify.info(`Hooray! We found ${awaitFetch.total} images.`)
+    Notify.success(`Hooray! We found ${awaitFetch.total} images.`)
     renderGallery(awaitFetch.hits);
     loadMoreBtn.classList.remove("is-hidden");
 
@@ -46,8 +50,6 @@ try {
 
 async function loadMoreFunc() {
     api.updatePage();
-    console.log(api.currentPage);
-    console.log(api.perPage);
 try {
     const awaitFetch = await api.getImages();
     renderGallery(awaitFetch.hits);
