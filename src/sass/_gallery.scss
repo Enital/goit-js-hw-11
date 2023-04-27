@@ -79,8 +79,8 @@ img {
 
 .gallery {
     flex-wrap: wrap;
-    margin: -10px;
-    padding-top: 80px;
+    // margin: -10px;
+    padding-top: 50px;
     display: flex;
     justify-content: center;
 }
@@ -93,4 +93,15 @@ img {
 
 .load-more-btn {    
     background: rgb(48, 219, 42);
+}
+
+.sorry-container{
+    background-color: beige;
+    margin-top: 10px;
+    padding: 1px;
+}
+.sorry{
+    text-align: center;
+    font-size: 17px;
+    color: coral;
 }

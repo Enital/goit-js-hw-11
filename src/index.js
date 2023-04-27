@@ -1,4 +1,5 @@
 import { renderGallery } from './js/gallery';
+import { sorryFunc } from './js/sorry';
 import { Notify } from 'notiflix';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { PixabayAPI } from './js/PixabayAPI';
@@ -8,6 +9,7 @@ const loadMoreBtn = document.querySelector('.load-more-btn');
 const gallery = document.querySelector('.gallery');
 
 const api = new PixabayAPI();
+
 form.addEventListener('submit', searchFunc);
 loadMoreBtn.addEventListener('click', loadMoreFunc);
 
@@ -20,31 +22,25 @@ async function searchFunc(event) {
     gallery.innerHTML = '';
 try {
     const awaitFetch = await api.getImages();
-
     if (!api.query) {
         showNotification('empty');
         return;
     }
-    else if (awaitFetch.totalHits === 0) {
+    if (awaitFetch.totalHits === 0) {
         showNotification('failure');
-        gallery.innerHTML = '';
         return;
     }
-    let maxItems = api.perPage * api.currentPage;
-    console.log(maxItems);
-    if (api.perPage * api.currentPage > awaitFetch.totalHits) {
-        endCollection();
-        return;
-    }
-    else {
-        Notify.info(`Hooray! We found ${awaitFetch.total} images.`)
-        renderGallery(awaitFetch.hits);
-        loadMoreBtn.classList.remove("is-hidden");
-        return;
+    Notify.info(`Hooray! We found ${awaitFetch.total} images.`)
+    renderGallery(awaitFetch.hits);
+    loadMoreBtn.classList.remove("is-hidden");
+
+    if (api.perPage * api.currentPage > awaitFetch.totalHits & api.query) {
+        showNotification('end');
+        loadMoreBtn.classList.add("is-hidden");
+        sorryFunc();
     }
 } catch (error) {
-    console.log('qwerqwer');
-    console.log(error);
+    console.log(error.message);
 } 
 };
 
@@ -52,15 +48,17 @@ async function loadMoreFunc() {
     api.updatePage();
     console.log(api.currentPage);
     console.log(api.perPage);
-    try {
-        if (api.perPage * api.currentPage > awaitFetch.totalHits) {
-            const awaitFetch = await api.getImages();
-            renderGallery(awaitFetch.hits);
-            endCollection;
-        }
-    } catch (error) {
-        console.log(error.message);
+try {
+    const awaitFetch = await api.getImages();
+    renderGallery(awaitFetch.hits);
+    if (api.perPage * api.currentPage > awaitFetch.totalHits) {
+        showNotification('end');
+        loadMoreBtn.classList.add("is-hidden");
+        sorryFunc();
     }
+} catch (error) {
+        console.log(error.message);
+}
 };
 
 const showNotification = (status) => {
@@ -72,12 +70,5 @@ const showNotification = (status) => {
     }
     if (status === 'empty') {
         Notify.info('Fill the form for searching')
-    }
-};
-
-function endCollection() {
-    if (api.perPage * api.currentPage > awaitFetch.totalHits) {
-        loadMoreBtn.classList.add("is-hidden");
-        showNotification('end');
     }
 };

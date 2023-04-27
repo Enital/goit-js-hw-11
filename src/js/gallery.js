@@ -2,7 +2,6 @@ import SimpleLightbox from 'simplelightbox';
 export { renderGallery as renderGallery }
 const gallery = document.querySelector('.gallery')
 
-
 function renderGallery (photo) {
     const galleryRender = photo
     .map(photo => {const 
